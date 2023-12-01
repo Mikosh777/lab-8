@@ -1,47 +1,22 @@
-from PIL import Image
+import requests
 
-def encode_image(image_path, message):
-    img = Image.open(image_path)
-    encoded_img = img.copy()
-    img = Image.open(image_path)
-    img = img.convert('RGB')  # Convert image to RGB mode
+# 1.1: GET Request
+post_id = 1 
+response = requests.get(f"https://jsonplaceholder.typicode.com/todos/{post_id}")
 
-
-    width, height = img.size
-    message_length = len(message)
-
-    encoded = False
-    if message_length * 3 <= width * height:  # Проверяем, может ли сообщение поместиться в изображение
-        encoded = True
-        message += "###"  # Добавляем разделитель, чтобы отметить конец сообщения
-
-        data_index = 0
-        for y in range(height):
-            for x in range(width):
-                r, g, b = img.getpixel((x, y))
-
-                # Кодируем ASCII-значение каждого символа в значения пикселей (R, G, B)
-                if data_index < len(message):
-                    ascii_value = ord(message[data_index])
-                    encoded_img.putpixel((x, y), (r // 2 * 2 + ascii_value % 2,
-                                                   g // 2 * 2 + (ascii_value // 2) % 2,
-                                                   b // 2 * 2 + (ascii_value // 4) % 2))
-                    data_index += 1
-
-                if data_index >= len(message):
-                    break
-            if data_index >= len(message):
-                break
-
-    encoded_img.save("encoded_image.png")
-    return encoded
-
-# Пример использования:
-message_to_hide = "Привет, это секретное сообщение!"
-image_path = "C:\\Users\\Admin\\Desktop\\пит\\крылья.png"
-# Кодирование сообщения в изображение
-encoded = encode_image(image_path, message_to_hide)
-if encoded:
-    print("Сообщение успешно закодировано в изображение.")
+if response.status_code >= 400:
+    print(f"Error: {response.status_code} - {response.text}")
 else:
-    print("Сообщение слишком длинное для кодирования в изображение.")
+    print("Response content:")
+    print(response.json())
+
+# 1.2: Create a ToDo class
+class ToDo:
+    def __init__(self, userId, id, title, completed):
+        self.userId = userId
+        self.id = id
+        self.title = title
+        self.completed = completed
+
+# 1.3: Create a new object of class ToDo
+new_todo = ToDo(userId=1, id=post_id, title="Sample Title", completed=False)
