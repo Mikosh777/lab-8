@@ -50,7 +50,7 @@ put_payload = {
     "completed": new_todo.completed
 }
 
-chosen_id = 1  
+chosen_id = 2  
 put_response = requests.put(f"https://jsonplaceholder.typicode.com/todos/{chosen_id}", json=put_payload)
 
 if put_response.status_code >= 400:
